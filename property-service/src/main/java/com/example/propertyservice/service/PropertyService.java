@@ -7,6 +7,7 @@ import com.example.propertyservice.models.User;
 import com.example.propertyservice.repositories.PropertyRepository;
 import com.example.propertyservice.repositories.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +36,16 @@ public class PropertyService {
 
     public Property saveProperty(Property property) {
         return propertyRepository.save(property);
+    }
+
+    public Property updateProperty(Property property) {
+        Property p = propertyRepository.findById(property.getId())
+                        .orElseThrow(() -> new EntityNotFoundException("Property not found"));
+
+        BeanUtils.copyProperties(property, p, "id");
+
+        return propertyRepository.save(p);
+
     }
 
 

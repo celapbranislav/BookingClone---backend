@@ -36,12 +36,13 @@ public class PropertyController {
     @PostMapping("/add")
     public ResponseEntity<?> addProperty(@RequestBody @Valid Property property) {
         User user = propertyService.findUserById(property.getHost().getId());
-        try {
-            return new ResponseEntity<>(propertyService.saveProperty(property), HttpStatus.CREATED);
-        } catch(EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
-        }
+        return new ResponseEntity<>(propertyService.saveProperty(property), HttpStatus.CREATED);
+
     }
 
+    @PutMapping("/updateProperty")
+    public ResponseEntity<?> updateProperty(@RequestBody @Valid Property property) {
+            return new ResponseEntity<>(propertyService.updateProperty(property), HttpStatus.OK);
+    }
 
 }
