@@ -1,6 +1,7 @@
 package com.example.propertyservice.controller;
 
 
+import com.example.propertyservice.exceptions.EntityNotFoundException;
 import com.example.propertyservice.models.Property;
 import com.example.propertyservice.models.User;
 import com.example.propertyservice.service.PropertyService;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
@@ -34,11 +36,12 @@ public class PropertyController {
     @PostMapping("/add")
     public ResponseEntity<?> addProperty(@RequestBody @Valid Property property) {
         User user = propertyService.findUserById(property.getHost().getId());
-        if (user != null) {
+        try {
             return new ResponseEntity<>(propertyService.saveProperty(property), HttpStatus.CREATED);
-        } else{
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nije pronadjen Host sa tim id-jem");
+        } catch(EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
         }
     }
-   
+
+
 }
