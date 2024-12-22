@@ -19,4 +19,8 @@ public class PropertyService {
         return propertyRepository.findAll();
     }
 
+    public Property getPropertyById(Integer id) {
+        return propertyRepository.findById(id).get();
+    }
+
 }
