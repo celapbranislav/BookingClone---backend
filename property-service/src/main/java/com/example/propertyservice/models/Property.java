@@ -10,6 +10,8 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -52,6 +54,13 @@ public class Property {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "host_id", nullable = false)
     private User host;
+
+    @ManyToMany
+    @JoinTable(
+            name = "property_amenities",
+            joinColumns = @JoinColumn(name = "property_id"),
+            inverseJoinColumns = @JoinColumn(name = "amenity_id"))
+    private Set<Amenity> amenities = new HashSet<>();
 
 
 }

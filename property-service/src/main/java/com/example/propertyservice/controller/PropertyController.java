@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,6 +44,11 @@ public class PropertyController {
     @PutMapping("/updateProperty")
     public ResponseEntity<?> updateProperty(@RequestBody @Valid Property property) {
             return new ResponseEntity<>(propertyService.updateProperty(property), HttpStatus.OK);
+    }
+
+    @GetMapping("/search")
+    public List<Property> getPropertiesBy(@RequestParam String country, @RequestParam BigDecimal maxPrice) {
+        return propertyService.getPropertiesByCountryAndPriceAndAmenities(country, maxPrice);
     }
 
 }
