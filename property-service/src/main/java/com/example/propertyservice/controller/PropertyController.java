@@ -26,8 +26,5 @@ public class PropertyController {
         return propertyService.getPropertyById(idProperty);
     }
 
-   public String hello(){
-        return "Hello World";
-   }
-
+   
 }
