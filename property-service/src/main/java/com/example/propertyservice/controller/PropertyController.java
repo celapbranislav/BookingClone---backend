@@ -3,11 +3,9 @@ package com.example.propertyservice.controller;
 
 
 import com.example.propertyservice.models.Property;
-import com.example.propertyservice.models.User;
 import com.example.propertyservice.service.PropertyService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,5 +54,10 @@ public class PropertyController {
         return propertyService.getPropertiesByCountryAndPriceAndAmenities(country, maxPrice, amenityIds, sortField, sortDirection);
     }
 
+    @DeleteMapping("/{idProperty}")
+    public ResponseEntity<?> deleteProperty(@PathVariable @Min(1) Integer idProperty) {
+        propertyService.deleteProperty(idProperty);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 
 }

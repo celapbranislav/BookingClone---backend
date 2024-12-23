@@ -4,8 +4,10 @@ package com.example.propertyservice.service;
 import com.example.propertyservice.exceptions.EntityNotFoundException;
 import com.example.propertyservice.exceptions.UserIsNotHostException;
 import com.example.propertyservice.models.Property;
+import com.example.propertyservice.models.PropertyAmenity;
 import com.example.propertyservice.models.User;
 import com.example.propertyservice.repositories.AmenityRepository;
+import com.example.propertyservice.repositories.PropertyAmenityRepository;
 import com.example.propertyservice.repositories.PropertyRepository;
 import com.example.propertyservice.repositories.UserRepository;
 import lombok.AllArgsConstructor;
@@ -25,6 +27,7 @@ public class PropertyService {
     private final PropertyRepository propertyRepository;
     private final UserRepository userRepository;
     private final AmenityRepository amenityRepository;
+    private final PropertyAmenityRepository propertyAmenities;
 
     public User findUserById(Integer id) {
        return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
@@ -73,5 +76,14 @@ public class PropertyService {
         return propertyRepository.findByCountryAndPriceAndAmenities(country, maxPrice, amenityIds, sorted);
     }
 
+    public void deleteProperty(Integer id) {
+        Property p = propertyRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Property not found"));
+
+        List<PropertyAmenity> pa = propertyAmenities.findAllByProperty(p);
+        if(!pa.isEmpty()){ propertyAmenities.deleteAll(pa); }
+
+        propertyRepository.delete(p);
+    }
 
 }
