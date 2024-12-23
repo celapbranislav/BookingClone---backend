@@ -17,5 +17,10 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorEntity, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(UserIsNotHostException.class)
+    public ResponseEntity<ErrorEntity> handleValueIsNegative(UserIsNotHostException ex){
+        ErrorEntity error = new ErrorEntity(LocalDate.now(), ex.getMessage(), "Trenutno nema vise detalja za error");
+        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+    }
 
 }

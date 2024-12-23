@@ -1,22 +1,21 @@
 package com.example.propertyservice.controller;
 
 
-import com.example.propertyservice.exceptions.EntityNotFoundException;
-import com.example.propertyservice.models.Amenity;
+
 import com.example.propertyservice.models.Property;
 import com.example.propertyservice.models.User;
 import com.example.propertyservice.service.PropertyService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
+
 
 @AllArgsConstructor
 @RestController
@@ -37,7 +36,6 @@ public class PropertyController {
 
     @PostMapping("/add")
     public ResponseEntity<?> addProperty(@RequestBody @Valid Property property) {
-        User user = propertyService.findUserById(property.getHost().getId());
         return new ResponseEntity<>(propertyService.saveProperty(property), HttpStatus.CREATED);
 
     }
@@ -49,8 +47,14 @@ public class PropertyController {
 
     //Mi ne mozemo poslati List<Aminty> preko query-a jer java ne zna kako da barata sa tim stvarima
     @GetMapping("/search")
-    public List<Property> getPropertiesBy(@RequestParam String country, @RequestParam BigDecimal maxPrice, @RequestParam List<Integer> amenityIds) {
-        return propertyService.getPropertiesByCountryAndPriceAndAmenities(country, maxPrice, amenityIds);
+    public List<Property> getPropertiesBy(
+            @RequestParam String country,
+            @RequestParam BigDecimal maxPrice,
+            @RequestParam List<Integer> amenityIds,
+            @RequestParam(required = false) String sortField,
+            @RequestParam(required = false, defaultValue = "ASC") String sortDirection) {
+        return propertyService.getPropertiesByCountryAndPriceAndAmenities(country, maxPrice, amenityIds, sortField, sortDirection);
     }
+
 
 }
