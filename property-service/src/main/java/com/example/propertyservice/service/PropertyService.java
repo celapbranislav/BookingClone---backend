@@ -2,8 +2,10 @@ package com.example.propertyservice.service;
 
 
 import com.example.propertyservice.exceptions.EntityNotFoundException;
+import com.example.propertyservice.models.Amenity;
 import com.example.propertyservice.models.Property;
 import com.example.propertyservice.models.User;
+import com.example.propertyservice.repositories.AmenityRepository;
 import com.example.propertyservice.repositories.PropertyRepository;
 import com.example.propertyservice.repositories.UserRepository;
 import lombok.AllArgsConstructor;
@@ -22,6 +24,7 @@ public class PropertyService {
 
     private final PropertyRepository propertyRepository;
     private final UserRepository userRepository;
+    private final AmenityRepository amenityRepository;
 
     public User findUserById(Integer id) {
        return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
@@ -49,8 +52,8 @@ public class PropertyService {
 
     }
 
-    public List<Property> getPropertiesByCountryAndPriceAndAmenities(String country, BigDecimal maxPrice){
-        return propertyRepository.findByCountryAndMinPricePerNight(country, maxPrice);
+    public List<Property> getPropertiesByCountryAndPriceAndAmenities(String country, BigDecimal maxPrice, List<Integer> amenityIds){
+        return propertyRepository.findByCountryAndMinPricePerNightAndAmenities(country, maxPrice, amenityIds);
     }
 
 

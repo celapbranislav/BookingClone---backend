@@ -2,6 +2,7 @@ package com.example.propertyservice.controller;
 
 
 import com.example.propertyservice.exceptions.EntityNotFoundException;
+import com.example.propertyservice.models.Amenity;
 import com.example.propertyservice.models.Property;
 import com.example.propertyservice.models.User;
 import com.example.propertyservice.service.PropertyService;
@@ -46,9 +47,10 @@ public class PropertyController {
             return new ResponseEntity<>(propertyService.updateProperty(property), HttpStatus.OK);
     }
 
+    //Mi ne mozemo poslati List<Aminty> preko query-a jer java ne zna kako da barata sa tim stvarima
     @GetMapping("/search")
-    public List<Property> getPropertiesBy(@RequestParam String country, @RequestParam BigDecimal maxPrice) {
-        return propertyService.getPropertiesByCountryAndPriceAndAmenities(country, maxPrice);
+    public List<Property> getPropertiesBy(@RequestParam String country, @RequestParam BigDecimal maxPrice, @RequestParam List<Integer> amenityIds) {
+        return propertyService.getPropertiesByCountryAndPriceAndAmenities(country, maxPrice, amenityIds);
     }
 
 }
