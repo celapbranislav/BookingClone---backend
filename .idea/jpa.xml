@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JpaBuddyIdeaProjectConfig">
-    <option name="reLastEntityCreationPackage" value="property-service/src/main/java/com/example/propertyservice/models" />
+    <option name="reLastEntityCreationPackage" value="user-service/src/main/java/com/example/userservice/models" />
     <option name="reverseEngineeringLastDbConnectionId" value="4aafaf6a-ae8f-4dd5-8c21-2e46cb72481b" />
   </component>
   <component name="JpaPluginProjectSettings" reUseValidationAnnotation="false" reExcludeTablePrefixes="" reExcludeColumnPrefixes="" reExcludeTableSuffixes="" reExcludeColumnSuffixes="">

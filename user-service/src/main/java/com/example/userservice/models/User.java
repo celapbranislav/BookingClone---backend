@@ -4,11 +4,12 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+
 @Getter
 @Setter
 @Entity
 @Table(name = "users")
-public class User{
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -28,9 +29,7 @@ public class User{
 
     @ColumnDefault("'user'")
     @Lob
-    @Enumerated(EnumType.STRING)
     @Column(name = "role")
-    private Role role;
-
+    private String role;
 
 }
