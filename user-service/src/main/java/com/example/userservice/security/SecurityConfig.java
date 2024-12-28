@@ -14,15 +14,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 
-
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
 
     @Bean
-    public UserDetailsService userDetailsService() { return new CustomUserDetailsService(); }
+    public UserDetailsService userDetailsService() {
+        return new CustomUserDetailsService();
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -47,8 +47,8 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/auth/register").permitAll()
-                    .anyRequest().authenticated())
+                        .requestMatchers("/auth/register").permitAll()
+                        .anyRequest().authenticated())
                 .formLogin(login ->
                         login.usernameParameter("email")
                                 .defaultSuccessUrl("/auth/welcome", true)
@@ -58,7 +58,6 @@ public class SecurityConfig {
 
         return http.build();
     }
-
 
 
 }

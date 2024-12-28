@@ -2,6 +2,8 @@ package com.example.propertyservice.controller;
 
 
 
+import com.example.propertyservice.dto.PropertyCreateDTO;
+import com.example.propertyservice.dto.PropertyDTO;
 import com.example.propertyservice.models.Property;
 import com.example.propertyservice.service.PropertyService;
 import jakarta.validation.Valid;
@@ -23,18 +25,18 @@ public class PropertyController {
     private final PropertyService propertyService;
 
     @GetMapping
-    public List<Property> getAllProperties() {
-        return propertyService.getAllProperties();
+    public List<PropertyDTO> getAllProperties() {
+        return propertyService.getProperties();
     }
 
     @GetMapping("/{idProperty}")
-    public Property getPropertyById(@PathVariable @Min(1) int idProperty) {
+    public PropertyDTO getPropertyById(@PathVariable @Min(1) int idProperty) {
         return propertyService.getPropertyById(idProperty);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addProperty(@RequestBody @Valid Property property) {
-        return new ResponseEntity<>(propertyService.saveProperty(property), HttpStatus.CREATED);
+    public ResponseEntity<?> addProperty(@RequestBody @Valid PropertyCreateDTO property, @RequestParam Integer idUser) {
+        return new ResponseEntity<>(propertyService.saveProperty(property, idUser), HttpStatus.CREATED);
 
     }
 
@@ -45,7 +47,7 @@ public class PropertyController {
 
     //Mi ne mozemo poslati List<Aminty> preko query-a jer java ne zna kako da barata sa tim stvarima
     @GetMapping("/search")
-    public List<Property> getPropertiesBy(
+    public List<PropertyDTO> getPropertiesBy(
             @RequestParam String country,
             @RequestParam BigDecimal maxPrice,
             @RequestParam List<Integer> amenityIds,

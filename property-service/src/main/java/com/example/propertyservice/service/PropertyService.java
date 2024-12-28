@@ -1,8 +1,13 @@
 package com.example.propertyservice.service;
 
 
+import com.example.propertyservice.dto.PropertyCreateDTO;
+import com.example.propertyservice.dto.PropertyDTO;
+import com.example.propertyservice.dto.ReviewDTO;
 import com.example.propertyservice.exceptions.EntityNotFoundException;
 import com.example.propertyservice.exceptions.UserIsNotHostException;
+import com.example.propertyservice.mapper.PropertyMapper;
+import com.example.propertyservice.models.Amenity;
 import com.example.propertyservice.models.Property;
 import com.example.propertyservice.models.PropertyAmenity;
 import com.example.propertyservice.models.User;
@@ -18,6 +23,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @AllArgsConstructor
@@ -26,28 +33,43 @@ public class PropertyService {
 
     private final PropertyRepository propertyRepository;
     private final UserRepository userRepository;
-    private final AmenityRepository amenityRepository;
     private final PropertyAmenityRepository propertyAmenities;
+    private final PropertyMapper propertyMapper;
+    private final AmenityRepository amenityRepository;
 
-    public User findUserById(Integer id) {
-       return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
+    public List<PropertyDTO> getProperties(){
+        List<Property> properties = propertyRepository.findAll();
+        return properties.stream().map(propertyMapper::maptoPropertyDTO).collect(Collectors.toList());
     }
 
-    public List<Property> getAllProperties() {
-        return propertyRepository.findAll();
-    }
-
-    public Property getPropertyById(Integer id) {
-        return propertyRepository.findById(id)
+    public PropertyDTO getPropertyById(Integer id) {
+        Property p = propertyRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Property with id " + id + " not found!"));
+
+        return propertyMapper.maptoPropertyDTO(p);
+
     }
 
-    public Property saveProperty(Property property) {
-        User user = userRepository.findById(property.getHost().getId()).get();
+    public Property saveProperty(PropertyCreateDTO property, Integer idUser) {
+        User user = userRepository.findById(idUser)
+                .orElseThrow(() -> new UserIsNotHostException("User with id " + idUser + " not found!"));
+
         if(user.getRole().equals("host")) {
-            return propertyRepository.save(property);
+            Property p = new Property();
+            p.setName(property.name());
+            p.setDescription(property.description());
+            p.setAddress(property.address());
+            p.setCity(property.city());
+            p.setCountry(property.country());
+            p.setPricePerNight(property.pricePerNight());
+            p.setMaxGuests(property.maxGuests());
+            Set<Amenity> amenities = amenityRepository.findByIds(property.amenities());
+            p.setAmenities(amenities);
+            p.setHost(user);
+
+            return propertyRepository.save(p);
         } else{
-            throw new UserIsNotHostException("User with id " + property.getHost().getId() + " is not host!");
+            throw new UserIsNotHostException("User with id " + idUser + " is not host!");
         }
 
     }
@@ -62,7 +84,7 @@ public class PropertyService {
 
     }
 
-    public List<Property> getPropertiesByCountryAndPriceAndAmenities(
+    public List<PropertyDTO> getPropertiesByCountryAndPriceAndAmenities(
             String country,
             BigDecimal maxPrice,
             List<Integer> amenityIds,
@@ -73,7 +95,8 @@ public class PropertyService {
             sorted = Sort.by(Sort.Direction.fromString(sortDirection), sortField);
         }
 
-        return propertyRepository.findByCountryAndPriceAndAmenities(country, maxPrice, amenityIds, sorted);
+        List<Property> properties = propertyRepository.findByCountryAndPriceAndAmenities(country, maxPrice, amenityIds, sorted);
+        return properties.stream().map(propertyMapper::maptoPropertyDTO).collect(Collectors.toList());
     }
 
     public void deleteProperty(Integer id) {
