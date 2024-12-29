@@ -3,6 +3,7 @@ package com.example.propertyservice.service;
 
 import com.example.propertyservice.dto.PropertyCreateDTO;
 import com.example.propertyservice.dto.PropertyDTO;
+import com.example.propertyservice.dto.PropertyUpdateDTO;
 import com.example.propertyservice.dto.ReviewDTO;
 import com.example.propertyservice.exceptions.EntityNotFoundException;
 import com.example.propertyservice.exceptions.UserIsNotHostException;
@@ -52,7 +53,7 @@ public class PropertyService {
 
     public Property saveProperty(PropertyCreateDTO property, Integer idUser) {
         User user = userRepository.findById(idUser)
-                .orElseThrow(() -> new UserIsNotHostException("User with id " + idUser + " not found!"));
+                .orElseThrow(() -> new EntityNotFoundException("User with id " + idUser + " not found!"));
 
         if(user.getRole().equals("host")) {
             Property p = new Property();
@@ -74,11 +75,20 @@ public class PropertyService {
 
     }
 
-    public Property updateProperty(Property property) {
-        Property p = propertyRepository.findById(property.getId())
+    public Property updateProperty(PropertyUpdateDTO property) {
+        Property p = propertyRepository.findById(property.propertyId())
                         .orElseThrow(() -> new EntityNotFoundException("Property not found"));
 
-        BeanUtils.copyProperties(property, p, "id");
+        p.setName(property.name());
+        p.setDescription(property.description());
+        p.setAddress(property.address());
+        p.setCity(property.city());
+        p.setCountry(property.country());
+        p.setPricePerNight(property.pricePerNight());
+        p.setMaxGuests(property.maxGuests());
+
+        Set<Amenity> amenities = amenityRepository.findByIds(property.amenities());
+        p.setAmenities(amenities);
 
         return propertyRepository.save(p);
 

@@ -4,10 +4,12 @@ package com.example.propertyservice.controller;
 
 import com.example.propertyservice.dto.PropertyCreateDTO;
 import com.example.propertyservice.dto.PropertyDTO;
+import com.example.propertyservice.dto.PropertyUpdateDTO;
 import com.example.propertyservice.models.Property;
 import com.example.propertyservice.service.PropertyService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +43,7 @@ public class PropertyController {
     }
 
     @PutMapping("/updateProperty")
-    public ResponseEntity<?> updateProperty(@RequestBody @Valid Property property) {
+    public ResponseEntity<?> updateProperty(@RequestBody @Valid PropertyUpdateDTO property) {
             return new ResponseEntity<>(propertyService.updateProperty(property), HttpStatus.OK);
     }
 
@@ -49,7 +51,7 @@ public class PropertyController {
     @GetMapping("/search")
     public List<PropertyDTO> getPropertiesBy(
             @RequestParam String country,
-            @RequestParam BigDecimal maxPrice,
+            @RequestParam @Positive BigDecimal maxPrice,
             @RequestParam List<Integer> amenityIds,
             @RequestParam(required = false) String sortField,
             @RequestParam(required = false, defaultValue = "ASC") String sortDirection) {
