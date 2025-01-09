@@ -119,4 +119,6 @@ public class PropertyService {
         propertyRepository.delete(p);
     }
 
+    //nesto novo iz ovoh
+
 }
