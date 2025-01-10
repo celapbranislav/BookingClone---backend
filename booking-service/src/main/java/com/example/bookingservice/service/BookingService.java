@@ -2,7 +2,7 @@ package com.example.bookingservice.service;
 
 import com.example.bookingservice.dto.BookingDTO;
 import com.example.bookingservice.dto.PropertyDTO;
-import com.example.bookingservice.exceptions.BookingIsAlreadyConfirmedException;
+import com.example.bookingservice.exceptions.BookingIsNotInPendingStatusException;
 import com.example.bookingservice.exceptions.DateIsInvalidException;
 import com.example.bookingservice.exceptions.EntityNotFoundException;
 import com.example.bookingservice.feign.PropertyFeign;
@@ -71,6 +71,7 @@ public class BookingService {
     }
 
     public List<Booking> getBookings(Integer idHost){
+        if(userRepository.findById(idHost).isEmpty()) { throw new EntityNotFoundException("User not found");}
         return bookingRepository.findByHostId(idHost);
     }
 
@@ -79,7 +80,7 @@ public class BookingService {
                 .orElseThrow(() -> new EntityNotFoundException("Booking not found"));
 
         if (!booking.getStatus().equals(Status.pending)) {
-            throw new BookingIsAlreadyConfirmedException("Booking is not in pending status");
+            throw new BookingIsNotInPendingStatusException("Booking is not in pending status");
         }
 
         booking.setStatus(Status.confirmed);
@@ -92,8 +93,8 @@ public class BookingService {
         Booking booking = bookingRepository.findById(idBooking)
                 .orElseThrow(() -> new EntityNotFoundException("Booking not found"));
 
-        if (booking.getStatus().equals(Status.cancelled)) {
-            throw new BookingIsAlreadyConfirmedException("Booking is already cancelled");
+        if (!booking.getStatus().equals(Status.pending)) {
+            throw new BookingIsNotInPendingStatusException("Booking is not in pending status");
         }
 
         booking.setStatus(Status.cancelled);

@@ -24,8 +24,8 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(er, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(BookingIsAlreadyConfirmedException.class)
-    public ResponseEntity<ErrorEntity> handleBookingIsAlreadyConfirmed(BookingIsAlreadyConfirmedException ex){
+    @ExceptionHandler(BookingIsNotInPendingStatusException.class)
+    public ResponseEntity<ErrorEntity> handleBookingIsAlreadyConfirmed(BookingIsNotInPendingStatusException ex){
         ErrorEntity er = new ErrorEntity(LocalDate.now(), ex.getMessage(), "Trenutno nema vise za error");
         return new ResponseEntity<>(er, HttpStatus.BAD_REQUEST);
     }

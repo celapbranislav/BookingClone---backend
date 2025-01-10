@@ -6,6 +6,6 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class BookingIsAlreadyConfirmedException extends RuntimeException {
+public class BookingIsNotInPendingStatusException extends RuntimeException {
     private String message;
 }

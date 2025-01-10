@@ -2,22 +2,18 @@ package com.example.bookingservice.controller;
 
 
 import com.example.bookingservice.dto.BookingDTO;
-import com.example.bookingservice.models.Booking;
 import com.example.bookingservice.service.BookingService;
-import feign.ResponseMapper;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/booking")
+@RequestMapping("/api/bookings")
 public class BookingController {
 
     private final BookingService bookingService;
