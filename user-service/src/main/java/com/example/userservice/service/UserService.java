@@ -18,7 +18,15 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
+    public String generateToken(String username) {
+        return jwtService.generateToken(username);
+    }
+
+    public void validateToken(String token) {
+        jwtService.validateToken(token);
+    }
 
     public void saveUser(UserCreateDTO user) {
         if (userRepository.findByEmail(user.email()).isPresent()) {
