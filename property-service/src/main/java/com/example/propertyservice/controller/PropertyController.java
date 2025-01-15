@@ -61,7 +61,7 @@ public class PropertyController {
     @DeleteMapping("/{idProperty}")
     public ResponseEntity<?> deleteProperty(@PathVariable @Min(1) Integer idProperty) {
         propertyService.deleteProperty(idProperty);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>("Property successfuly deleted",HttpStatus.NO_CONTENT);
     }
 
 }

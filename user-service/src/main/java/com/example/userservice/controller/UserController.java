@@ -1,6 +1,7 @@
 package com.example.userservice.controller;
 
 import com.example.userservice.authentication.CustomUserDetails;
+import com.example.userservice.dto.UserCreateDTO;
 import com.example.userservice.dto.UserDTO;
 import com.example.userservice.models.User;
 import com.example.userservice.service.CustomUserDetailsService;
@@ -29,7 +30,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> saveUser(@RequestBody User user) {
+    public ResponseEntity<String> saveUser(@RequestBody UserCreateDTO user) {
         userService.saveUser(user);
         return ResponseEntity.ok("User registered successfully");
     }

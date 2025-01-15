@@ -1,5 +1,6 @@
 package com.example.userservice.dto;
 
+import com.example.userservice.models.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +13,7 @@ public class UserDTO {
     private String username;
     private String email;
     private String phoneNumber;
-    private String role;
+    private Role role;
 
 
 

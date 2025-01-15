@@ -27,9 +27,8 @@ public class User {
     @Column(name = "phone", length = 20)
     private String phone;
 
-    @ColumnDefault("'user'")
-    @Lob
+    @Enumerated(EnumType.STRING)
     @Column(name = "role")
-    private String role;
+    private Role role = Role.user;
 
 }

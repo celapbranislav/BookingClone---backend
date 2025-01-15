@@ -1,5 +1,6 @@
 package com.example.userservice.service;
 
+import com.example.userservice.dto.UserCreateDTO;
 import com.example.userservice.dto.UserDTO;
 import com.example.userservice.models.User;
 import com.example.userservice.repositories.UserRepository;
@@ -19,21 +20,21 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
 
-    public void saveUser(User user) {
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+    public void saveUser(UserCreateDTO user) {
+        if (userRepository.findByEmail(user.email()).isPresent()) {
             throw new IllegalArgumentException("Email already in use");
         }
 
 
         User u = new User();
-        user.setEmail(user.getEmail());
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setName(user.getName());
-        user.setPhone(user.getPhone());
-        user.setRole(user.getRole());
+        u.setEmail(user.email());
+        u.setPassword(passwordEncoder.encode(user.password()));
+        u.setName(user.name());
+        u.setPhone(user.phone());
+        u.setRole(user.role());
 
 
-        userRepository.save(user);
+        userRepository.save(u);
     }
 
     public List<UserDTO> getUsersDto(){
