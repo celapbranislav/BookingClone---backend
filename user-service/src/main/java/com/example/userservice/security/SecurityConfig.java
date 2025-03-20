@@ -14,6 +14,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 
 @Configuration
@@ -47,9 +50,10 @@ public class SecurityConfig {
         http.authenticationProvider(authenticationProvider());
 
         http
+
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/register", "/auth/token", "/auth/validate").permitAll()
+                        .requestMatchers("/auth/register", "/auth/token", "/auth/validate" , "/api/properties").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(login ->
                         login.usernameParameter("email")
@@ -64,6 +68,18 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("http://localhost:5173"); // Dozvoljava frontend domen
+        configuration.addAllowedMethod("*"); // Dozvoljava sve HTTP metode (GET, POST, itd.)
+        configuration.addAllowedHeader("*"); // Dozvoljava sva zaglavlja
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration); // Primena CORS-a na sve rute
+        return source;
     }
 
 }
